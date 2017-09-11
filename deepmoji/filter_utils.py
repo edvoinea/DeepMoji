@@ -128,12 +128,6 @@ def shorten_word(word):
     """ Shorten groupings of 3+ identical consecutive chars to 2, e.g. '!!!!' --> '!!'
     """
 
-    # only shorten ASCII words
-    try:
-        word.decode('ascii')
-    except (UnicodeDecodeError, UnicodeEncodeError) as e:
-        return word
-
     # must have at least 3 char to be shortened
     if len(word) < 3:
         return word

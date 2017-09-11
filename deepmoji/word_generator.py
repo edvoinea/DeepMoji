@@ -63,10 +63,6 @@ class WordGenerator():
             that is not allowed.
         """
 
-        if not isinstance(sentence, unicode):
-            raise ValueError("All sentences should be Unicode-encoded!")
-        sentence = sentence.strip().lower()
-
         if self.break_replacement:
             sentence = convert_linebreaks(sentence)
 
@@ -90,15 +86,6 @@ class WordGenerator():
         words = tokenize(sentence)
         words = [process_word(w) for w in words]
         return words
-
-    def check_ascii(self, word):
-        """ Returns whether a word is ASCII """
-
-        try:
-            word.decode('ascii')
-            return True
-        except (UnicodeDecodeError, UnicodeEncodeError):
-            return False
 
     def convert_unicode_punctuation(self, word):
         word_converted_punct = []
@@ -125,8 +112,7 @@ class WordGenerator():
             allowed (set as a variable during initialization), then only
             punctuation that can be converted to ASCII will be allowed.
         """
-        if self.check_ascii(word):
-            return True, word
+        return True, word
 
         # First we ensure that the Unicode is normalized so it's
         # always a single character.
@@ -142,7 +128,7 @@ class WordGenerator():
 
         # If conversion of punctuation and removal of emojis took care
         # of all the Unicode or if we allow Unicode then everything is fine
-        if self.check_ascii(word) or self.allow_unicode_text:
+        if self.allow_unicode_text:
             return True, word
         else:
             # Sometimes we might want to simply ignore Unicode sentences
